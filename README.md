@@ -1,1 +1,1 @@
-# MyRepository
+# Beginner Python Project
