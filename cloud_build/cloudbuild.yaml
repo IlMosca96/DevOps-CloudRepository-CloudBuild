@@ -28,9 +28,9 @@ steps:
   id: CF-HELLOWORLD
   args: ['functions', 'deploy', 'helloWorld',
     '--source=cloud_functions',
-    '--project=jit-training-dma',
+    '--project=[PROJECT_ID]',
     '--trigger-http',
-    '--service-account=gcp-training-dma.group@jakala.com',
+    '--service-account=[SERVICE_ACCOUNT]',
     '--region=europe-west1',
     '--entry-point=main',
     '--memory=256',
