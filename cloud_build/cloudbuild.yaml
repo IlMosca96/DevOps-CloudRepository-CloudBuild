@@ -1,0 +1,40 @@
+steps:
+- name: python:3.7
+  id: INSTALL
+  entrypoint: python3
+  args:
+    - '-m'
+    - 'pip'
+    - 'install'
+    - '-t'
+    - '.'
+    - '-r'
+    - 'requirements.txt'
+
+- name: python:3.7
+  entrypoint: python3
+  id: RUN-LINTER-CHECK
+  args:
+    - '-m'
+    - 'flake8'
+    - '--ignore=E226,E302,E41,C901,E121,E126,E128,E265,W503,W291,E251,F821,F841,W605'
+    - '--max-line-length=195'
+    - '--max-complexity=10'
+    - 'code'
+  waitFor:
+    - INSTALL
+
+- name: gcr.io/cloud-builders/gcloud
+  id: CF-HELLOWORLD
+  args: ['functions', 'deploy', 'helloWorld',
+    '--source=cloud_functions',
+    '--project=jit-training-dma',
+    '--trigger-http',
+    '--service-account=gcp-training-dma.group@jakala.com',
+    '--region=europe-west1',
+    '--entry-point=main',
+    '--memory=256',
+    '--runtime=python37'
+  ]
+  waitFor:
+    - RUN-LINTER-CHECK
